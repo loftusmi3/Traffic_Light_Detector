@@ -2,6 +2,7 @@ import numpy as np
 import cv2
 from PIL import Image
 import matplotlib.pyplot as plt
+import argparse
 
 """
 given an image and location of traffic signal,
@@ -65,6 +66,16 @@ def check_color(img):
   return color
 
 if __name__ == "__main__":
-    imageFrame = Image.open('./Valid_Traffic_Lights/traffic_light0_00001.jpg')
+    
+    # Example for how to run from command line:
+    # python color_lights.py -n 68
+    # In this example, 68 is the image ID number
+    
+    parser = argparse.ArgumentParser()
+    parser.add_argument('-n', '--number')
+    args = parser.parse_args()
+    while len(args.number) < 5:
+        args.number = '0' + args.number
+    imageFrame = Image.open(('./Valid_Traffic_Lights/traffic_light0_%s.jpg' % args.number))
     color = check_color(imageFrame)
     print(color)
