@@ -66,6 +66,7 @@ def get_box(image, config, weights, classes_input):
                 confidences.append(float(confidence))
                 boxes.append([x, y, w, h])
 
+    traffic_light_boxes = boxes[class_ids == 9]
     '''
     indices = cv2.dnn.NMSBoxes(boxes, confidences, conf_threshold, nms_threshold)
     img_to_ret = image.copy()
