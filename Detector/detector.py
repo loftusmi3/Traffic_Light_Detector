@@ -1,5 +1,6 @@
 import cv2
 import numpy as np
+import pdb
 
 # Given a picture, get_box returns the bounding boxes on the traffic lights
 
@@ -66,6 +67,12 @@ def get_box(image, config, weights, classes_input):
                 confidences.append(float(confidence))
                 boxes.append([x, y, w, h])
 
+    indices = cv2.dnn.NMSBoxes(boxes, confidences, conf_threshold, nms_threshold)
+
+    class_ids = np.asarray(class_ids)
+    boxes = np.asarray(boxes)
+    
+    #pdb.set_trace()
     traffic_light_boxes = boxes[class_ids == 9]
     '''
     indices = cv2.dnn.NMSBoxes(boxes, confidences, conf_threshold, nms_threshold)
@@ -84,4 +91,4 @@ def get_box(image, config, weights, classes_input):
         h = box[3]
         draw_prediction(img_to_ret, class_ids[i], confidences[i], round(x), round(y), round(x+w), round(y+h))
     '''
-    return boxes
+    return traffic_light_boxes
