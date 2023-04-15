@@ -7,8 +7,9 @@ import argparse
 import pdb
 import os
 
-def KCF_tracker(detector,video_name):
-    # Adapted from https://learnopencv.com/object-tracking-using-opencv-cpp-python/
+def KCF_tracker(config,weights,classes_input,video_name):
+    # Adapted from https://learnopencv.com/object-tracking-using-opencv-cpp-python/ and
+    # https://learnopencv.com/multitracker-multiple-object-tracking-using-opencv-c-python/
 
     video = cv2.VideoCapture(video_name)
         # Exit if video not opened.
@@ -16,49 +17,55 @@ def KCF_tracker(detector,video_name):
         print("Video not found")
         sys.exit()
     
-    tracker = cv2.TrackerKCF_create()
-    
     ok, frame = video.read()
     if not ok:
         print('Cannot read video file')
         sys.exit()
     
+    net = detector.create_det(weights,config)
+    
     # Assume just one traffic light for now
-    bbox = detector.get_box(frame, config, weights, classes_input)
-
-    # Initialize tracker with first frame and bounding box
-    tracker.init(frame, (int(bbox[0][0]),int(bbox[0][1]),int(bbox[0][2]),int(bbox[0][3])))
+    bboxes = detector.get_box(frame, net, classes_input)
+    
+    multiTracker = cv2.MultiTracker_create()
+    for i in range(0,len(bboxes)):
+        multiTracker.add(cv2.TrackerKCF_create(), frame, (int(bboxes[i][0]),int(bboxes[i][1]),int(bboxes[i][2]),int(bboxes[i][3])))
+    #for i in range(0,len(bboxes)):
+    #    trackers[i].init(frame, (int(bboxes[i][0]),int(bboxes[i][1]),int(bboxes[i][2]),int(bboxes[i][3])))
 
     fourcc = cv2.VideoWriter_fourcc(*'mp4v')
-    tracked_video = cv2.VideoWriter("Results/tracked_"+os.path.basename(video_name), fourcc, 20, (frame.shape[1],frame.shape[0]))
+    tracked_video = cv2.VideoWriter("Results/tracked_"+os.path.basename(video_name), fourcc, 10, (frame.shape[1],frame.shape[0]))
     
     while ok:
         ok, frame = video.read()
 
         # Start timer
-        timer = cv2.getTickCount()
+        #timer = cv2.getTickCount()
 
-        ok, bbox = tracker.update(frame)
+        #fps = cv2.getTickFrequency() / (cv2.getTickCount() - timer);
+        
+        ok, bboxes = multiTracker.update(frame)
 
-        fps = cv2.getTickFrequency() / (cv2.getTickCount() - timer);
-
-        # Draw bounding box
+        # Draw bounding box 
         if ok:
-            # Tracking success
-            p1 = (int(bbox[0]), int(bbox[1]))
-            p2 = (int(bbox[0] + bbox[2]), int(bbox[1] + bbox[3]))
-            #pdb.set_trace()
-            color = color_lights.get_color(frame[p1[1]:p2[1],p1[0]:p2[0]])
-            cv2.rectangle(frame, p1, p2, color, 2)
-        #else :
-            # Tracking failure
-        #    cv2.putText(frame, "Tracking failure detected", (100,80), cv2.FONT_HERSHEY_SIMPLEX, 0.75,(0,0,255),2)
+            for bbox in bboxes:
+                p1 = (int(bbox[0]), int(bbox[1]))
+                p2 = (int(bbox[0] + bbox[2]), int(bbox[1] + bbox[3]))
+                color = color_lights.get_color(frame[p1[1]:p2[1],p1[0]:p2[0]])
+                cv2.rectangle(frame, p1, p2, color, 2)
+        # If the object tracker can't keep tracking, redetect and reinitialize object tracker
+        elif len(bboxes) > 0:
+            bboxes = detector.get_box(frame, net, classes_input)
+            multiTracker = cv2.MultiTracker_create()
+            for i in range(0,len(bboxes)):
+                multiTracker.add(cv2.TrackerKCF_create(), frame,
+                                 (int(bboxes[i][0]),int(bboxes[i][1]),int(bboxes[i][2]),int(bboxes[i][3])))
 
         # Display tracker type on frame
         cv2.putText(frame, "KCFTracker", (100,20), cv2.FONT_HERSHEY_SIMPLEX, 0.75, (50,170,50),2);
 
         # Display FPS on frame
-        cv2.putText(frame, "FPS : " + str(int(fps)), (100,50), cv2.FONT_HERSHEY_SIMPLEX, 0.75, (50,170,50), 2);
+        #cv2.putText(frame, "FPS : " + str(int(fps)), (100,50), cv2.FONT_HERSHEY_SIMPLEX, 0.75, (50,170,50), 2);
 
         # Save video
         tracked_video.write(frame)
@@ -93,6 +100,6 @@ if __name__ == "__main__":
     weights = "../Detector/yolov3.weights"
     classes_input = "../Detector/yolov3.txt"
         
-    KCF_tracker(detector,str('Videos/tl_vid%s.mp4' % args.number))
+    KCF_tracker(config,weights,classes_input,str('Videos/tl_vid%s.mp4' % args.number))
     
     
