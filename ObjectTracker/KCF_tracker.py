@@ -47,11 +47,12 @@ def KCF_tracker(detector,video_name):
             # Tracking success
             p1 = (int(bbox[0]), int(bbox[1]))
             p2 = (int(bbox[0] + bbox[2]), int(bbox[1] + bbox[3]))
-            color = color_lights.get_color(frame[p1[0]:p2[0],p1[1]:p2[1]])
+            #pdb.set_trace()
+            color = color_lights.get_color(frame[p1[1]:p2[1],p1[0]:p2[0]])
             cv2.rectangle(frame, p1, p2, color, 2)
-        else :
+        #else :
             # Tracking failure
-            cv2.putText(frame, "Tracking failure detected", (100,80), cv2.FONT_HERSHEY_SIMPLEX, 0.75,(0,0,255),2)
+        #    cv2.putText(frame, "Tracking failure detected", (100,80), cv2.FONT_HERSHEY_SIMPLEX, 0.75,(0,0,255),2)
 
         # Display tracker type on frame
         cv2.putText(frame, "KCFTracker", (100,20), cv2.FONT_HERSHEY_SIMPLEX, 0.75, (50,170,50),2);

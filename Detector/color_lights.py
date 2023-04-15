@@ -3,6 +3,7 @@ import cv2
 from PIL import Image
 import matplotlib.pyplot as plt
 import argparse
+import pdb
 
 """
 given an image and location of traffic signal,
@@ -31,6 +32,7 @@ def get_color(img):
     # red_upper = np.array([180, 255, 255], np.uint8)
     red_lower = np.array([100, 87, 111], np.uint8)
     red_upper = np.array([180, 255, 255], np.uint8)
+    #pdb.set_trace()
     red_mask = cv2.inRange(hsvFrame, red_lower, red_upper)
 
     # Set range for yellow color and
