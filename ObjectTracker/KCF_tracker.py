@@ -2,6 +2,7 @@ import cv2
 import sys
 sys.path.append("../Detector")
 import detector
+import color_lights
 import argparse
 import pdb
 import os
@@ -46,8 +47,8 @@ def KCF_tracker(detector,video_name):
             # Tracking success
             p1 = (int(bbox[0]), int(bbox[1]))
             p2 = (int(bbox[0] + bbox[2]), int(bbox[1] + bbox[3]))
-            cv2.rectangle(frame, p1, p2, (255,0,0), 2)
-            #pdb.set_trace()
+            color = color_lights.get_color(frame[p1[0]:p2[0],p1[1]:p2[1]])
+            cv2.rectangle(frame, p1, p2, color, 2)
         else :
             # Tracking failure
             cv2.putText(frame, "Tracking failure detected", (100,80), cv2.FONT_HERSHEY_SIMPLEX, 0.75,(0,0,255),2)
