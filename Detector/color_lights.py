@@ -3,13 +3,15 @@ import cv2
 from PIL import Image
 import matplotlib.pyplot as plt
 import argparse
-
+import pdb
 """
 given an image and location of traffic signal,
 check what color light is currently active.
+Returns an index into the color array that
+represents the active color.
 """
 def check_color(img):
-  color = ['r', 'y', 'g']
+  colors = ['r', 'y', 'g']
 
   # # load the image
   # imageFrame = Image.open('/Valid_Traffic_Lights/traffic_light0_00001.jpg')
@@ -36,8 +38,8 @@ def check_color(img):
 
   # Set range for yellow color and
   # define mask
-  yellow_lower = np.array([20, 100, 100], np.uint8)
-  yellow_upper = np.array([30, 255, 255], np.uint8)
+  yellow_lower = np.array([20, 40, 40], np.uint8)
+  yellow_upper = np.array([50, 60, 60], np.uint8)
   yellow_mask = cv2.inRange(hsvFrame, yellow_lower, yellow_upper)
 
   # Set range for green color and
@@ -59,11 +61,11 @@ def check_color(img):
   print(f'percentage light is green = {green_percent}')
 
   percents = [red_percent, yellow_percent, green_percent]
-
-  color = color[np.argmax(percents)]
+  index = np.argmax(percents)
+  color = colors[index]
 
   print(f'detected color is {color}')
-  return color
+  return index
 
 if __name__ == "__main__":
     
