@@ -36,7 +36,7 @@ def KCF_tracker(config,weights,classes_input,video_name):
     fourcc = cv2.VideoWriter_fourcc(*'mp4v')
     tracked_video = cv2.VideoWriter("Results/tracked_"+os.path.basename(video_name), fourcc, 10, (frame.shape[1],frame.shape[0]))
     
-    while ok:
+    while ok
         ok, frame = video.read()
 
         # Start timer
