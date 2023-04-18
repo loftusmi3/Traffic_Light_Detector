@@ -27,16 +27,18 @@ def draw_prediction(img, class_id, confidence, x, y, x_plus_w, y_plus_h):
 
 def create_det(weights,config):
     return cv2.dnn.readNet(weights, config)
+
+def get_classes(classes_input):
+    classes = None
+    with open(classes_input, 'r') as f:
+        classes = [line.strip() for line in f.readlines()]
+    return classes
     
-def get_box(image, net, classes_input):
+def get_box(image, net, classes):
     
     Width = image.shape[1]
     Height = image.shape[0]
     scale = 0.00392
-    
-    classes = None
-    with open(classes_input, 'r') as f:
-        classes = [line.strip() for line in f.readlines()]
         
     blob = cv2.dnn.blobFromImage(image, scale, (416,416), (0,0,0), True, crop=False)
     net.setInput(blob)
@@ -64,7 +66,5 @@ def get_box(image, net, classes_input):
                 x = center_x - w / 2
                 y = center_y - h / 2
                 boxes.append([x, y, w, h])
-
-    boxes = np.asarray(boxes)
     
-    return boxes
+    return np.asarray(boxes)
