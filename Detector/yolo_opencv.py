@@ -59,7 +59,7 @@ def print_image(image, name, output_boxes):
     class_ids = []
     confidences = []
     boxes = []
-    conf_threshold = 0.5
+    conf_threshold = 0.75
     nms_threshold = 0.4
         
     for out in outs:
@@ -98,13 +98,13 @@ def print_image(image, name, output_boxes):
             cv2.imwrite(join(args.folder, "traffic_light" + str(traffic_light_num) + "_" + name), cropped)
             traffic_light_num += 1
             
-        #draw_prediction(image, class_ids[i], confidences[i], round(x), round(y), round(x+w), round(y+h))
+        draw_prediction(image, class_ids[i], confidences[i], round(x), round(y), round(x+w), round(y+h))
 
-    #cv2.imshow("object detection", image)
-    #cv2.waitKey()
+    cv2.imshow("object detection", image)
+    cv2.waitKey()
 
-    #cv2.imwrite(join(args.folder, "detected_" + name), image)
-    #cv2.destroyAllWindows()
+    cv2.imwrite(join(args.folder, "detected_" + name), image)
+    cv2.destroyAllWindows()
 
 classes = None
 
@@ -114,7 +114,6 @@ with open(classes_input, 'r') as f:
 COLORS = np.random.uniform(0, 255, size=(len(classes), 3))
 
 net = cv2.dnn.readNet(weights, config)  
-output_boxes = {}
         
 for name in os.listdir(args.folder):
     if "detected" in name:
@@ -123,7 +122,3 @@ for name in os.listdir(args.folder):
         continue
     image = cv2.imread(join(args.folder, name))
     print_image(image, name, output_boxes)
-
-with open("myfile.txt", 'w') as f: 
-    for key, value in output_boxes.items(): 
-        f.write('%s:%s\n' % (key, value))
