@@ -27,8 +27,8 @@ def get_color(data):
 
         # Set range for yellow color and
         # define mask
-        yellow_lower = np.array([105, 115, 100], np.uint8)
-        yellow_upper = np.array([115, 200, 160], np.uint8)
+        yellow_lower = np.array([95, 115, 100], np.uint8)
+        yellow_upper = np.array([115, 200, 255], np.uint8)
         yellow_mask = cv2.inRange(hsvFrame, yellow_lower, yellow_upper)
 
         # Set range for green color and
@@ -86,9 +86,10 @@ if __name__ == "__main__":
     # # green light test
     # imageFrame = Image.open("Valid_Traffic_Lights/traffic_light2_00012.jpg")
 
+    
     # convert image to numpy array
     data = np.array(imageFrame)
-    # plt.imshow(imageFrame)
-    # plt.savefig('./light.png')
+    plt.imshow(imageFrame)
+    plt.savefig('./light.png')
     color = get_color(data)
     print(color)
