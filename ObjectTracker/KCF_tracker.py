@@ -100,16 +100,17 @@ if __name__ == "__main__":
     # python color_lights.py -n 68
     # In this example, 68 is the image ID number
     
+    '''
     parser = argparse.ArgumentParser()
     parser.add_argument('-n', '--number')
     args = parser.parse_args()
     while len(args.number) < 5:
         args.number = '0' + args.number
-    
+    '''
     config = "../Detector/yolov3.cfg"
     weights = "../Detector/yolov3.weights"
     classes_input = "../Detector/yolov3.txt"
         
-    KCF_tracker(config,weights,classes_input,str('Videos/tl_vid%s.mp4' % args.number))
-    
+    #KCF_tracker(config,weights,classes_input,str('Videos/tl_vid%s.mp4' % args.number))
+    KCF_tracker(config,weights,classes_input,str('Videos/IMG_6771.MOV'))
     

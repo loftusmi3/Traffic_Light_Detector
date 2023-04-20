@@ -27,8 +27,8 @@ def get_color(data):
 
         # Set range for yellow color and
         # define mask
-        yellow_lower = np.array([95, 115, 100], np.uint8)
-        yellow_upper = np.array([115, 200, 255], np.uint8)
+        yellow_lower = np.array([95, 190, 210], np.uint8)
+        yellow_upper = np.array([115, 255, 255], np.uint8)
         yellow_mask = cv2.inRange(hsvFrame, yellow_lower, yellow_upper)
 
         # Set range for green color and
