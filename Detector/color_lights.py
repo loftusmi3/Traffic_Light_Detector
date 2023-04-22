@@ -50,11 +50,11 @@ def get_color(data):
         #print(f'percentage light is green = {green_percent}')
 
         c = np.argmax([red_percent, yellow_percent, green_percent])
-        print(f'red {red_percent}')
-        print(f'yellow {yellow_percent}') 
-        print(f'green {green_percent}')
-        color = ['red', 'yellow', 'green']
-        print(f'detected color is {color[c]}')
+        # print(f'red {red_percent}')
+        # print(f'yellow {yellow_percent}') 
+        # print(f'green {green_percent}')
+        # color = ['red', 'yellow', 'green']
+        # print(f'detected color is {color[c]}')
 
         # BGR color for OpenCV
         if c == 0:
