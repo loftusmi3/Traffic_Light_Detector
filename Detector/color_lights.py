@@ -15,7 +15,7 @@ def get_color(data):
     if(data.size != 0):
     
         # convert to HSV
-        hsvFrame = cv2.cvtColor(data, cv2.COLOR_BGR2HSV)
+        hsvFrame = cv2.cvtColor(data, cv2.COLOR_RGB2HSV)
 
         # Set range for red color and
         # define mask
@@ -50,11 +50,11 @@ def get_color(data):
         #print(f'percentage light is green = {green_percent}')
 
         c = np.argmax([red_percent, yellow_percent, green_percent])
-        # print(f'red {red_percent}')
-        # print(f'yellow {yellow_percent}') 
-        # print(f'green {green_percent}')
-        # color = ['red', 'yellow', 'green']
-        # print(f'detected color is {color[c]}')
+        #print(f'red {red_percent}')
+        #print(f'yellow {yellow_percent}') 
+        #print(f'green {green_percent}')
+        #color = ['red', 'yellow', 'green']
+        #print(f'detected color is {color[c]}')
 
         # BGR color for OpenCV
         if c == 0:

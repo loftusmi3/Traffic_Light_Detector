@@ -22,6 +22,8 @@ def KCF_tracker(config,weights,classes_input,video_name):
         print('Cannot read video file')
         sys.exit()
     
+    print("Reading video")
+    
     net = detector.create_det(weights,config)
     classes = detector.get_classes(classes_input)
     
@@ -38,8 +40,8 @@ def KCF_tracker(config,weights,classes_input,video_name):
     tracked_video = cv2.VideoWriter("Results/tracked_"+os.path.basename(video_name), fourcc, 10, (frame.shape[1],frame.shape[0]))
     
     frames_not_ok = 0
+
     while ok:
-        ok, frame = video.read()
 
         # Start timer
         #timer = cv2.getTickCount()
@@ -100,17 +102,17 @@ if __name__ == "__main__":
     # python color_lights.py -n 68
     # In this example, 68 is the image ID number
     
-    '''
+    
     parser = argparse.ArgumentParser()
     parser.add_argument('-n', '--number')
     args = parser.parse_args()
     while len(args.number) < 5:
         args.number = '0' + args.number
-    '''
+    
     config = "../Detector/yolov3.cfg"
     weights = "../Detector/yolov3.weights"
     classes_input = "../Detector/yolov3.txt"
         
-    #KCF_tracker(config,weights,classes_input,str('Videos/tl_vid%s.mp4' % args.number))
-    KCF_tracker(config,weights,classes_input,str('Videos/IMG_6771.MOV'))
+    KCF_tracker(config,weights,classes_input,str('Videos/tl_vid%s.mp4' % args.number))
+    #KCF_tracker(config,weights,classes_input,str('Videos/IMG_6771.MOV'))
     
