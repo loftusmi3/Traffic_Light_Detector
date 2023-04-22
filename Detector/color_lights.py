@@ -21,14 +21,14 @@ def get_color(data):
         # define mask
         # red_lower = np.array([136, 87, 111], np.uint8)
         # red_upper = np.array([180, 255, 255], np.uint8)
-        red_lower = np.array([116, 28, 111], np.uint8)
+        red_lower = np.array([111, 28, 111], np.uint8)
         red_upper = np.array([180, 255, 255], np.uint8)
         red_mask = cv2.inRange(hsvFrame, red_lower, red_upper)
 
         # Set range for yellow color and
         # define mask
-        yellow_lower = np.array([95, 115, 100], np.uint8)
-        yellow_upper = np.array([115, 200, 255], np.uint8)
+        yellow_lower = np.array([90, 180, 200], np.uint8)
+        yellow_upper = np.array([110, 255, 255], np.uint8)
         yellow_mask = cv2.inRange(hsvFrame, yellow_lower, yellow_upper)
 
         # Set range for green color and
@@ -50,14 +50,17 @@ def get_color(data):
         #print(f'percentage light is green = {green_percent}')
 
         c = np.argmax([red_percent, yellow_percent, green_percent])
-
-        #print(f'detected color is {color}')
+        print(f'red {red_percent}')
+        print(f'yellow {yellow_percent}') 
+        print(f'green {green_percent}')
+        color = ['red', 'yellow', 'green']
+        print(f'detected color is {color[c]}')
 
         # BGR color for OpenCV
         if c == 0:
             return (0,0,255)
         elif c == 1:
-            return (127,127,0)
+            return (0,127,127)
         else:
             return (0,255,0)
         
@@ -70,12 +73,12 @@ if __name__ == "__main__":
     # python color_lights.py -n 68
     # In this example, 68 is the image ID number
     
-    parser = argparse.ArgumentParser()
-    parser.add_argument('-n', '--number')
-    args = parser.parse_args()
-    while len(args.number) < 5:
-        args.number = '0' + args.number
-    imageFrame = Image.open(('./Valid_Traffic_Lights/traffic_light0_%s.jpg' % args.number))
+    # parser = argparse.ArgumentParser()
+    # parser.add_argument('-n', '--number')
+    # args = parser.parse_args()
+    # while len(args.number) < 5:
+    #     args.number = '0' + args.number
+    # imageFrame = Image.open(('./Valid_Traffic_Lights/traffic_light0_%s.jpg' % args.number))
 
     # # red light test
     # imageFrame = Image.open("Valid_Traffic_Lights/traffic_light0_00072.jpg")
@@ -86,10 +89,10 @@ if __name__ == "__main__":
     # # green light test
     # imageFrame = Image.open("Valid_Traffic_Lights/traffic_light2_00012.jpg")
 
-    
+    imageFrame = Image.open("our_lights/tl1060.png")
     # convert image to numpy array
     data = np.array(imageFrame)
-    plt.imshow(imageFrame)
+    plt.imshow(data)
     plt.savefig('./light.png')
     color = get_color(data)
     print(color)
