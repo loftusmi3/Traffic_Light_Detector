@@ -74,14 +74,16 @@ def KCF_tracker(config,weights,classes_input,video_name):
                                          (int(bboxes[i][0]),int(bboxes[i][1]),int(bboxes[i][2]),int(bboxes[i][3])))
 
         # Display tracker type on frame
-        #cv2.putText(frame, "KCFTracker", (100,20), cv2.FONT_HERSHEY_SIMPLEX, 0.75, (50,170,50),2);
+        cv2.putText(frame, "KCFTracker", (100,20), cv2.FONT_HERSHEY_SIMPLEX, 0.75, (50,170,50),2);
 
         # Display FPS on frame
         #cv2.putText(frame, "FPS : " + str(int(fps)), (100,50), cv2.FONT_HERSHEY_SIMPLEX, 0.75, (50,170,50), 2);
 
         # Save video
         tracked_video.write(frame)
+        cv2.namedWindow('Tracker', cv2.WINDOW_KEEPRATIO)
         cv2.imshow("Tracker",frame)
+        cv2.resizeWindow('Tracker', 800, 1000)
 
         # Exit if ESC pressed
         k = cv2.waitKey(1) & 0xff
